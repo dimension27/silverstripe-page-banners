@@ -19,15 +19,25 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function updateCMSFields( FieldSet $fields ) {
-		$banners = DataObject::get('Banner'); /* @var $bannerGroups DataObjectSet */
-		$bannerGroups = DataObject::get('BannerGroup'); /* @var $bannerGroups DataObjectSet */
-		
+		if( $banners = DataObject::get('Banner') ) { /* @var $banners DataObjectSet */
+			$banners = $banners->map();
+		}
+		else {
+			$banners = array('-- No banners have been created --');
+		}
+		if( $bannerGroups = DataObject::get('BannerGroup') ) { /* @var $bannerGroups DataObjectSet */
+			$bannerGroups = $bannerGroups->map();
+		}
+		else {
+			$bannerGroups = array('-- No banner groups have been created --');
+		}
 		$fields->addFieldToTab('Root.Content.Images', $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
 		$banner = new SelectionGroup('BannerType', array(
-			'BannerGroup//Banner Group' => new DropdownField('BannerGroupID', '', $bannerGroups->map()),
-			'SingleBanner//Single Banner' => new DropdownField('SingleBannerID', '', $banners->map()),
-			'Image//Upload an Image' => new ImageUploadField('Image', ''),
+			'BannerGroup//Banner Group' => new DropdownField('BannerGroupID', '', $bannerGroups),
+			'SingleBanner//Single Banner' => new DropdownField('SingleBannerID', '', $banners),
+			'Image//Upload an Image' => $upload = new ImageUploadField('BannerImage', ''),
 		));
+		$upload->setUploadFolder('Uploads/Banners');
 		$fields->addFieldToTab('Root.Content.Images', $banner);
 	}
 
@@ -51,7 +61,23 @@ class BannerDecorator extends DataObjectDecorator {
 				$rv = $this->owner->Parent->Banner();
 			}
 		}
+		if( !$rv ) {
+			$rv = new Image();
+		}
 		return $rv;
 	}
-	
+
+	public function BannerLink( $width, $height ) {
+		$image = $this->Banner();
+		if( $image->exists() ) {
+			$image = $image->SetCroppedSize($width, $height);
+			return $image->Filename;
+		}
+	}
+
+	public function BannerCSS( $width, $height ) {
+		if( $url = $this->BannerLink($width, $height) ) {
+			return "background-image: url(".htmlspecialchars($url).")";
+		}
+	}
 }
