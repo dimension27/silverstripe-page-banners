@@ -80,4 +80,29 @@ class BannerDecorator extends DataObjectDecorator {
 			return "background-image: url(".htmlspecialchars($url).")";
 		}
 	}
+
+	public function AllBanners() {
+		$rv = false;
+		switch( $this->owner->BannerType ) {
+			case 'Image':
+				$image = $this->owner->BannerImage();
+				break;
+			case 'SingleBanner':
+				$image = $this->owner->SingleBanner();
+				break;
+			case 'BannerGroup':
+				if( $group = $this->owner->BannerGroup() ) { /* @var $group BannerGroup */
+					$set = $group->Banners();
+				}
+				break;
+		}
+		if( isset($image) && is_file($image->getFullPath()) ) {
+			$set = new DataObjectSet(array($image));
+		}
+		if( (!$set || !$set->Count()) && self::$inherit && $this->owner->Parent ) {
+			$set = $this->owner->Parent->AllBanners();
+		}
+		return $set;
+	} 
+
 }
