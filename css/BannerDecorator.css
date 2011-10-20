@@ -1,0 +1,12 @@
+#BannerGroupID /* .SelectionGroup li.selected div.field */ {
+	margin: 0;
+}
+p#BannerCarousel {
+	margin: 0;
+}
+#Form_EditForm_BannerCarousel /* .SelectionGroup li input, .right .SelectionGroup li label */ {
+	display: inline;
+}
+p#BannerCarousel /* .SelectionGroup li input, .right .SelectionGroup li label */ {
+	display: inline;
+}

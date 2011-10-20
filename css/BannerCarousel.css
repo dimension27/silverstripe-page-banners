@@ -1,0 +1,48 @@
+.banner-carousel .slides_container {
+	width: 960px;
+	height: 340px;
+	display: none;
+}
+.banner-carousel .slides_container div {
+	width: 960px;
+	height: 340px;
+	display: block;
+}
+.carousel-pagination {
+	display: none;
+}
+.carousel-navigation {
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+	z-index: 5;
+	border: 1px solid rgba(255,255,255,0.8);
+	padding: 7px;
+	background-color: rgba(255,255,255,0.5);
+}
+.carousel-navigation * {
+	float: left;
+}
+.carousel-navigation .carousel-pagination {
+	display: block;
+}
+.carousel-navigation ul {
+	margin: 0 5px;
+}
+.carousel-navigation li {
+	display: block;
+	background: #fff;
+}
+.carousel-navigation li a {
+	width: 16px;
+	height: 16px;
+	line-height: 16px;
+	text-align: center;
+	text-decoration: none;
+}
+.carousel-navigation li {
+	margin: 0 2px;
+}
+.carousel-navigation li.current {
+	font-weight: bold;
+}

@@ -10,7 +10,10 @@ class Banner extends BetterImage {
 	 * @return FieldSet
 	 */
 	public function getCMSFields() {
-		return FormUtils::getFileCMSFields();
+		$fields = FormUtils::getFileCMSFields('Caption');
+		LinkFields::addLinkFields($fields, null, 'Root.Link');
+		$fields->removeByName('LinkLabel');
+		return $fields;
 	}
 
 }

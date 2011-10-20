@@ -5,7 +5,8 @@ class BannerDecorator extends DataObjectDecorator {
 	public function extraStatics() {
 		return array(
 			'db' => array(
-				'BannerType' => 'Enum("Image, SingleBanner, BannerGroup")'
+				'BannerType' => 'Enum("Image, SingleBanner, BannerGroup")',
+				'BannerCarousel' => 'Int',
 			),
 			'has_one' => array(
 				'BannerImage' => 'BetterImage',
@@ -19,6 +20,7 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function updateCMSFields( FieldSet $fields ) {
+		Requirements::css('banners/css/BannerDecorator.css');
 		if( $banners = DataObject::get('Banner') ) { /* @var $banners DataObjectSet */
 			$banners = $banners->map();
 		}
@@ -33,7 +35,10 @@ class BannerDecorator extends DataObjectDecorator {
 		}
 		$fields->addFieldToTab('Root.Content.Images', $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
 		$banner = new SelectionGroup('BannerType', array(
-			'BannerGroup//Banner Group' => new DropdownField('BannerGroupID', '', $bannerGroups),
+			'BannerGroup//Banner Group' => new CompositeField(array(
+				new DropdownField('BannerGroupID', '', $bannerGroups),
+				new CheckboxField('BannerCarousel', 'Display the banners in a scrolling image carousel'),
+			)),
 			'SingleBanner//Single Banner' => new DropdownField('SingleBannerID', '', $banners),
 			'Image//Upload an Image' => $upload = new ImageUploadField('BannerImage', ''),
 		));
@@ -92,7 +97,7 @@ class BannerDecorator extends DataObjectDecorator {
 				break;
 			case 'BannerGroup':
 				if( $group = $this->owner->BannerGroup() ) { /* @var $group BannerGroup */
-					$set = $group->Banners();
+					$set = $group->Banners(null, 'SortOrder ASC');
 				}
 				break;
 		}
@@ -104,5 +109,27 @@ class BannerDecorator extends DataObjectDecorator {
 		}
 		return $set;
 	} 
+
+	public function BannerMarkup() {
+		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
+			Requirements::block(SAPPHIRE_DIR . '/thirdparty/jquery/jquery.js');
+			Requirements::javascript('ss-tools/javascript/jquery-1.4.4.js');
+			return $this->owner->renderWith('BannerCarousel');
+		}
+		else {
+			return $this->Banner();
+		}
+	}
+
+	public function CarouselOptions() {
+		return json_encode(array(
+				'preload' => true,
+				'preloadImage' => 'banners/examples/Standard/img/loading.gif',
+				'play' => 10000,
+				'pause' => 5000,
+				'hoverPause' => true,
+				'paginationClass' => 'carousel-pagination',
+		));
+	}
 
 }
