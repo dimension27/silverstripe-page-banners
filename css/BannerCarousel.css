@@ -43,6 +43,3 @@
 .carousel-navigation li {
 	margin: 0 2px;
 }
-.carousel-navigation li.current {
-	font-weight: bold;
-}
