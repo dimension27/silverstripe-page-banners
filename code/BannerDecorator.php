@@ -125,7 +125,7 @@ class BannerDecorator extends DataObjectDecorator {
 		return json_encode(array(
 				'preload' => true,
 				'preloadImage' => 'banners/examples/Standard/img/loading.gif',
-				'play' => 10000,
+				'play' => 7000,
 				'pause' => 5000,
 				'hoverPause' => true,
 				'paginationClass' => 'carousel-pagination',
