@@ -4,11 +4,13 @@ class BannerGroup extends DataObject {
 
 	static $db = array(
 		'Title' => 'Varchar',
-		'Notes' => 'Text'
+		'Notes' => 'Text',
+		'Identifier' => 'Varchar',
 	);
 
 	static $indexes = array(
 		'Title' => 'UNIQUE ("Title")',
+		'Identifier' => 'UNIQUE ("Identifier")',
 	);
 
 	static $has_many = array(
@@ -33,11 +35,22 @@ class BannerGroup extends DataObject {
 		return $fields;
 	}
 
+	public function onBeforeWrite() {
+		parent::onBeforeWrite();
+		if( !$this->Identifier ) {
+			$this->Identifier = preg_replace('/[^a-z0-9_-]+/i', '', $this->Title);
+		}
+	}
+
 	/**
 	 * Return a random Banner.
 	 */
 	public function RandomBanner() {
 		return $this->Banners(null, 'RAND()', null, 1)->pop();
+	}
+
+	public static function get_by_identifier( $id ) {
+		return DataObject::get_one('BannerGroup', "Identifier = '$id'");
 	}
 
 }

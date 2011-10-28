@@ -2,6 +2,28 @@
 
 class BannerDecorator extends DataObjectDecorator {
 
+	protected static $restrictToGroup;
+	protected static $tabName = 'Root.Content.Images';
+
+	/**
+	 * Restricts the selection of banners to a single BannerGroup in the CMS fields
+	 * @param BannerGroup $group May be a BannerGroup or its ID
+	 */
+	public static function restrictToGroup( $group ) {
+		self::$restrictToGroup = 
+			is_object($group) ? $group
+				: is_string($group) ? BannerGroup::get_by_identifier($group)
+					: DataObject::get_by_id('BannerGroup', $group);
+	}
+
+	/**
+	 * Restricts the selection of banners to a single BannerGroup in the CMS fields
+	 * @param BannerGroup $group May be a BannerGroup or its ID
+	 */
+	public static function setTabName( $tabName ) {
+		self::$tabName = $tabName;
+	}
+
 	public function extraStatics() {
 		return array(
 			'db' => array(
@@ -21,29 +43,36 @@ class BannerDecorator extends DataObjectDecorator {
 
 	public function updateCMSFields( FieldSet $fields ) {
 		Requirements::css('banners/css/BannerDecorator.css');
-		if( $banners = DataObject::get('Banner') ) { /* @var $banners DataObjectSet */
+		$filter = self::$restrictToGroup ? "BannerGroupID = '".self::$restrictToGroup->ID."'" : '';
+		if( $banners = DataObject::get('Banner', $filter) ) { /* @var $banners DataObjectSet */
 			$banners = $banners->map();
 		}
 		else {
 			$banners = array('-- No banners have been created --');
 		}
+		
 		if( $bannerGroups = DataObject::get('BannerGroup') ) { /* @var $bannerGroups DataObjectSet */
 			$bannerGroups = $bannerGroups->map();
 		}
 		else {
 			$bannerGroups = array('-- No banner groups have been created --');
 		}
-		$fields->addFieldToTab('Root.Content.Images', $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
-		$banner = new SelectionGroup('BannerType', array(
-			'BannerGroup//Banner Group' => new CompositeField(array(
+		if( !($field = $fields->fieldByName(self::$tabName)) || !is_a($field, 'TabSet') ) {
+			self::$tabName = 'Root.Images';
+		}
+		$fields->addFieldToTab(self::$tabName, $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
+		$options = array();
+		if( !self::$restrictToGroup ) {
+			$options['BannerGroup//Banner Group'] = new CompositeField(array(
 				new DropdownField('BannerGroupID', '', $bannerGroups),
 				new CheckboxField('BannerCarousel', 'Display the banners in a scrolling image carousel'),
-			)),
-			'SingleBanner//Single Banner' => new DropdownField('SingleBannerID', '', $banners),
-			'Image//Upload an Image' => $upload = new ImageUploadField('BannerImage', ''),
-		));
+			));
+		}
+		$options['SingleBanner//Single banner'] = new DropdownField('SingleBannerID', '', $banners);
+		$options['Image//Upload an image'] = $upload = new ImageUploadField('BannerImage', '');
+		$banner = new SelectionGroup('BannerType', $options);
 		$upload->setUploadFolder('Uploads/Banners');
-		$fields->addFieldToTab('Root.Content.Images', $banner);
+		$fields->addFieldToTab(self::$tabName, $banner);
 	}
 
 	public function Banner() {
