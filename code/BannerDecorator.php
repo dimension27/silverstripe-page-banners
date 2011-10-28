@@ -57,7 +57,7 @@ class BannerDecorator extends DataObjectDecorator {
 		else {
 			$bannerGroups = array('-- No banner groups have been created --');
 		}
-		if( !($field = $fields->fieldByName(self::$tabName)) || !is_a($field, 'TabSet') ) {
+		if( !($field = $fields->fieldByName(self::$tabName)) || !is_a($field, 'Tab') ) {
 			self::$tabName = 'Root.Images';
 		}
 		$fields->addFieldToTab(self::$tabName, $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
@@ -102,6 +102,10 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function BannerLink( $width, $height ) {
+		return $this->BannerURL($width, $height);
+	}
+
+	public function BannerURL( $width, $height ) {
 		$image = $this->Banner();
 		if( $image->exists() && file_exists($image->getFullPath()) ) {
 			$image = $image->SetCroppedSize($width, $height);
@@ -110,7 +114,7 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function BannerCSS( $width, $height ) {
-		if( $url = $this->BannerLink($width, $height) ) {
+		if( $url = $this->BannerURL($width, $height) ) {
 			return "background-image: url(".htmlspecialchars($url).")";
 		}
 	}
