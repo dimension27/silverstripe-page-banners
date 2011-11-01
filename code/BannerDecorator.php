@@ -4,6 +4,7 @@ class BannerDecorator extends DataObjectDecorator {
 
 	protected static $restrictToGroup;
 	protected static $tabName = 'Root.Content.Images';
+	protected static $inheritFromParent = true;
 
 	/**
 	 * Restricts the selection of banners to a single BannerGroup in the CMS fields
@@ -22,6 +23,10 @@ class BannerDecorator extends DataObjectDecorator {
 	 */
 	public static function setTabName( $tabName ) {
 		self::$tabName = $tabName;
+	}
+
+	public static function setInheritFromParent( $bool = true ) {
+		self::$inheritFromParent = $bool;
 	}
 
 	public function extraStatics() {
@@ -91,7 +96,7 @@ class BannerDecorator extends DataObjectDecorator {
 				break;
 		}
 		if( !$rv || !is_file($rv->getFullPath()) ) {
-			if( $this->owner->Parent ) {
+			if( self::$inheritFromParent && $this->owner->Parent ) {
 				$rv = $this->owner->Parent->Banner();
 			}
 		}
@@ -137,7 +142,7 @@ class BannerDecorator extends DataObjectDecorator {
 		if( isset($image) && is_file($image->getFullPath()) ) {
 			$set = new DataObjectSet(array($image));
 		}
-		if( (!$set || !$set->Count()) && self::$inherit && $this->owner->Parent ) {
+		if( (!$set || !$set->Count()) && self::$inheritFromParent && $this->owner->Parent ) {
 			$set = $this->owner->Parent->AllBanners();
 		}
 		return $set;
