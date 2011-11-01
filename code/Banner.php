@@ -1,6 +1,6 @@
 <?php
 
-class Banner extends BetterImage {
+class Banner extends BetterImage { // implements ImageCarouselItem
 
 	static $has_one = array (
 		'BannerGroup' => 'BannerGroup',

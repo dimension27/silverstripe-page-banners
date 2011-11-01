@@ -1,21 +1,25 @@
-<% require javascript(http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.3.js) %>
-<% require javascript(banners/js/slides.min.jquery.js) %>
-<% require themedCSS(BannerCarousel) %>
-<div id="banner-carousel" class="banner-carousel">
-	<div id="banner-carousel-overlay"></div>
+<% require themedCSS(SlidesCarousel) %>
+<div id="slides-carousel" class="slides-carousel">
+	<div id="slides-carousel-overlay"></div>
 	<div class="slides_container">
-	<% control AllBanners %>
-		<div><a href="$LinkURL" title="$Title">$SizedTag(340)</a></div>
+	<% control CarouselItems %>
+		<div><a href="$LinkURL" title="$Title">$Image.SizedTag</a></div>
 	<% end_control %>
 	</div>
-	<div class="carousel-navigation">
-		<a href="#" class="prev">&lt;</a>
-		<ul class="carousel-pagination"></ul>
-		<a href="#" class="next">&gt;</a>
+	<div class="carousel-navigation" style="width: $NumItemsBy(100, px)">
+		<a href="#" class="prev">prev</a>
+		<ul class="carousel-pagination">
+		<% control CarouselItems %>
+		<li><a href="#">$Pos</a></li>
+		<% end_control %>
+		</ul>
+		<a href="#" class="next">next</a>
 	</div>
 </div>
+<% if IncludeScriptInBody %>
 <script type="text/javascript">
 jQuery(function($) {
-	$('#banner-carousel').slides($CarouselOptions);
+	$('#slides-carousel').slides($CarouselOptions);
 });
 </script>
+<% end_if %>

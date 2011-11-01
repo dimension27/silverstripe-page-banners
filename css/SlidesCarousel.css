@@ -1,9 +1,9 @@
-.banner-carousel .slides_container {
+.slides-carousel .slides_container {
 	width: 960px;
 	height: 340px;
 	display: none;
 }
-.banner-carousel .slides_container div {
+.slides-carousel .slides_container div {
 	width: 960px;
 	height: 340px;
 	display: block;

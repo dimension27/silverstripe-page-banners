@@ -143,26 +143,15 @@ class BannerDecorator extends DataObjectDecorator {
 		return $set;
 	} 
 
-	public function BannerMarkup() {
+	public function BannerMarkup( $width = null, $height = null, $transform = 'SetRatioSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
-			Requirements::block(SAPPHIRE_DIR . '/thirdparty/jquery/jquery.js');
-			Requirements::javascript('ss-tools/javascript/jquery-1.4.4.js');
-			return $this->owner->renderWith('BannerCarousel');
+			$carousel = new SlidesCarousel($this->AllBanners());
+			$carousel->setRatioSize($width, $height);
+			return $carousel->forTemplate();
 		}
 		else {
 			return $this->Banner();
 		}
-	}
-
-	public function CarouselOptions() {
-		return json_encode(array(
-				'preload' => true,
-				'preloadImage' => 'banners/examples/Standard/img/loading.gif',
-				'play' => 7000,
-				'pause' => 5000,
-				'hoverPause' => true,
-				'paginationClass' => 'carousel-pagination',
-		));
 	}
 
 }
