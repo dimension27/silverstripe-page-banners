@@ -1,7 +1,25 @@
 <?php
-
+/**
+ * Various jQuery carousel plugins are available in this module:
+ * 
+ * - Slides: Best option, but doesn't support showing more than one slide at a time
+ *   - See http://slidesjs.com/
+ * - jCarousel: Okay, but does support showing more than one slide at a time.
+ *   - Have had problems extending it in the past
+ *   - No support for showing pagination
+ *   - Benefit is that it works out how many slides to display based on the widths of the slides 
+ *   - See http://sorgalla.com/projects/jcarousel/
+ *   - Does dumb things like removing your classes
+ * - BXSlider: Supports more than one slide at a time but requires a width to be specified for each item
+ *   - Also, the number of slides to display at once is pre-defined - doesn't adapt to the width
+ * 
+ * @author simonwade
+ */
 class ImageCarousel extends ViewableData {
 
+	public static $options = array();
+	public static $includeScriptInBody = true;
+	public $template;
 	protected $items;
 
 	public function __construct( $items ) {
@@ -49,6 +67,14 @@ class ImageCarousel extends ViewableData {
 
 	public function NumItemsBy( $widthPerItem, $suffix = null ) {
 		return $this->CarouselItems()->Count() * $widthPerItem.$suffix;
+	}
+
+	public function CarouselOptions() {
+		return json_encode(self::$options);
+	}
+
+	public function IncludeScriptInBody() {
+		return self::$includeScriptInBody;
 	}
 
 }
