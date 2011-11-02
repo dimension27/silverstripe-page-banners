@@ -1,44 +1,46 @@
-.slides-carousel .slides_container {
-	width: 960px;
-	height: 340px;
-	display: none;
+.jcarousel-container {
+	width: 746px;
+	height: 369px;
+	overflow: hidden;
 }
-.slides-carousel .slides_container div {
-	width: 960px;
-	height: 340px;
-	display: block;
+.jcarousel-clip {
+	height: 308px;
 }
-.carousel-pagination {
-	display: none;
+.jcarousel li {
+	margin: 0 10px 0 0;
 }
+
 .carousel-navigation {
-	position: absolute;
-	right: 20px;
-	bottom: 20px;
-	z-index: 5;
-	padding: 8px;
-	background-color: rgba(255,255,255,0.5);
+	margin: 0 auto;
+	padding: 25px 0px 25px 0px;
 }
-.carousel-navigation * {
-	float: left;
+.carousel-navigation a {
+	float:left;
+	text-indent:-999em;	
+	display:block;
+	margin-right: 10px;
 }
-.carousel-navigation .carousel-pagination {
-	display: block;
+.carousel-navigation a.prev,
+.carousel-navigation a.next {
+	background: url(../images/common/sprite.png);	
+	width:5px;
+	height:12px;	
 }
-.carousel-navigation ul {
-	margin: 0 5px;
+.carousel-navigation a.prev {
+	background-position: -13px -35px;
 }
-.carousel-navigation li {
-	display: block;
-	background: #fff;
-}
-.carousel-navigation li a {
-	width: 16px;
-	height: 16px;
-	line-height: 16px;
-	text-align: center;
-	text-decoration: none;
+.carousel-navigation a.next {
+	background-position: -61px -35px;
 }
 .carousel-navigation li {
-	margin: 0 2px;
+	float:left;
+	list-style: none;
+}
+.carousel-navigation li a {	
+	background: url(../images/common/sprite.png) -47px -36px;
+	width:9px;
+	height:10px;
+}
+.carousel-navigation li.current a {
+	background-position: -28px -36px;		
 }
