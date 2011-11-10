@@ -27,10 +27,12 @@ class ImageCarousel extends ViewableData {
 	}
 
 	public function CarouselItems() {
-		$items = new DataObjectSet;
-		foreach( $this->items as $item ) {
-			if( ($image = $item->Image()) && $image->fileExists() ) {
-				$items->push($item);
+		$items = new DataObjectSet();
+		if( $this->items ) {
+			foreach( $this->items as $item ) {
+				if( ($image = $item->Image()) && $image->fileExists() ) {
+					$items->push($item);
+				}
 			}
 		}
 		return $items;
@@ -57,10 +59,12 @@ class ImageCarousel extends ViewableData {
 	}
 
 	public function resizeImages( $method, $arg1, $arg2 = null ) {
-		foreach( $this->items as $item ) {
-			$image = $item->Image(); /* @var $image BetterImage */
-			if( $image && $image->fileExists() ) {
-				$item->setImage($image->$method($arg1, $arg2));
+		if( $this->items ) {
+			foreach( $this->items as $item ) {
+				$image = $item->Image(); /* @var $image BetterImage */
+				if( $image && $image->fileExists() ) {
+					$item->setImage($image->$method($arg1, $arg2));
+				}
 			}
 		}
 	}
@@ -94,6 +98,7 @@ interface ImageCarouselItem {
 
 	function LinkURL();
 	function Title();
+	function Caption();
 
 }
 
