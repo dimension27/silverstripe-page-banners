@@ -1,10 +1,9 @@
-.slides-carousel .slides_container {
-	display: none;
-}
-.slides-carousel .slides_container div {
+.slides-carousel {
 	width: 960px;
 	height: 340px;
-	display: block;
+}
+.slides_container .slide {
+	display: none;
 }
 .carousel-pagination {
 	display: none;
