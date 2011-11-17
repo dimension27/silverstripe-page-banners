@@ -1,3 +1,3 @@
 <?php
-DataObject::add_extension('Banner', 'LinkFieldsDecorator');
-SortableDataObject::add_sortable_class('Banner');
+DataObject::add_extension('ImageCarouselItem', 'LinkFieldsDecorator');
+SortableDataObject::add_sortable_classes(array('Banner', 'ImageCarouselItem'));

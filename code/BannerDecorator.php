@@ -84,7 +84,8 @@ class BannerDecorator extends DataObjectDecorator {
 		$rv = false;
 		switch( $this->owner->BannerType ) {
 			case 'Image':
-				$rv = $this->owner->BannerImage();
+				$rv = new Banner();
+				$rv->Image = $this->owner->BannerImage();
 				break;
 			case 'SingleBanner':
 				$rv = $this->owner->SingleBanner();
@@ -95,7 +96,7 @@ class BannerDecorator extends DataObjectDecorator {
 				}
 				break;
 		}
-		if( !$rv || !is_file($rv->getFullPath()) ) {
+		if( !$rv || !$rv->Image()->fileExists() ) {
 			if( self::$inheritFromParent && $this->owner->Parent ) {
 				$rv = $this->owner->Parent->Banner();
 			}
@@ -150,9 +151,16 @@ class BannerDecorator extends DataObjectDecorator {
 
 	public function BannerMarkup( $width = null, $height = null, $transform = 'SetRatioSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
-			$carousel = new SlidesCarousel(ImageCarousel::getItemsForImages($this->AllBanners()));
+			$items = new DataObjectSet();
+			foreach( $this->AllBanners() as $banner ) {
+				$item = new ImageCarouselItem();
+				$item->setImage($banner->Image());
+				$item->Title = $banner->Title;
+				$items->push($item);
+			}
+			$carousel = new SlidesCarousel($items);
 			$carousel->setRatioSize($width, $height);
-			return $carousel->forTemplate();
+			return $carousel;
 		}
 		else {
 			return $this->Banner();

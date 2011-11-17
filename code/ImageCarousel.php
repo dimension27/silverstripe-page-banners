@@ -18,7 +18,7 @@
 class ImageCarousel extends ViewableData {
 
 	public static $options = array();
-	public static $includeScriptInBody = true;
+	public static $includeScriptInBody = false;
 	public $template;
 	protected $items;
 
@@ -82,51 +82,11 @@ class ImageCarousel extends ViewableData {
 	}
 
 	public static function getItemsForImages( $images ) {
-		$items = new DataObjectSet();
+		$items = array();
 		foreach( $images as $image ) {
-			$items->push(new ImageCarouselItem($image));
+			$items[] = new ImageCarouselItem($image);
 		}
 		return $items;
 	}
 
 }
-
-class ImageCarouselItem {
-
-	public $dataObject, $image, $LinkUrl, $Title, $Caption;
-
-	function __construct( $dataObject, $LinkURL = null, $Title = null, $Caption = null ) {
-		$this->image = $image;
-		$this->LinkURL = $LinkURL;
-		$this->Title = $Title;
-		$this->Caption = $Caption;
-	}
-
-	/**
-	 * @return Image
-	 */
-	function Image() {
-		return $this->image ? $this->image
-				: $this->dataObject instanceof Image ? $this->dataObject
-						: $this->dataObject->Image();
-	}
-
-	/**
-	 * Used to allow ImageCarousel to provide support for resizing.
-	 * @param Image $image
-	 */
-	function setImage( $image ) {
-		$this->image = $image;
-	}
-
-	function __get( $property ) {
-		if( isset($this->dataObject->$property) ) {
-			return $this->dataObject->$property;
-		}
-		else if( method_exists($this->dataObject, $method = "get$property") ) {
-			return $this->dataObject->$method();
-		}
-	}
-
-}
-

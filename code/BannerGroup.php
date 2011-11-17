@@ -3,14 +3,13 @@
 class BannerGroup extends DataObject {
 
 	static $db = array(
-		'Title' => 'Varchar',
+		'Title' => 'Varchar(255)',
 		'Notes' => 'Text',
-		'Identifier' => 'Varchar',
+		'Identifier' => 'Varchar(255)',
 	);
 
 	static $indexes = array(
 		'Title' => 'UNIQUE ("Title")',
-		'Identifier' => 'UNIQUE ("Identifier")',
 	);
 
 	static $has_many = array(
