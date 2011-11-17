@@ -23,9 +23,9 @@ class BannerGroup extends DataObject {
 		$fields->addFieldToTab('Root.Main', $field = new TextareaField('Notes'));
 		if( $this->ID ) {
 			$fields->addFieldToTab('Root.Main', $field = new ImageDataObjectManager(
-				$this, 'Banners', 'Banner'
+				$this, 'Banners', 'Banner', 'Image'
 			));
-			$field->uploadFolder = 'Uploads/Banners';
+			UploadFolderManager::setDOMUploadFolder($field, $this->Identifier);
 		}
 		else {
 			$fields->addFieldToTab('Root.Main', $field = new LiteralField(

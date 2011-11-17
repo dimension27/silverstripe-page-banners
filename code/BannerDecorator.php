@@ -150,7 +150,7 @@ class BannerDecorator extends DataObjectDecorator {
 
 	public function BannerMarkup( $width = null, $height = null, $transform = 'SetRatioSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
-			$carousel = new SlidesCarousel($this->AllBanners());
+			$carousel = new SlidesCarousel(ImageCarousel::getItemsForImages($this->AllBanners()));
 			$carousel->setRatioSize($width, $height);
 			return $carousel->forTemplate();
 		}

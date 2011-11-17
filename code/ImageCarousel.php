@@ -81,24 +81,52 @@ class ImageCarousel extends ViewableData {
 		return self::$includeScriptInBody;
 	}
 
+	public static function getItemsForImages( $images ) {
+		$items = new DataObjectSet();
+		foreach( $images as $image ) {
+			$items->push(new ImageCarouselItem($image));
+		}
+		return $items;
+	}
+
 }
 
-interface ImageCarouselItem {
+class ImageCarouselItem {
+
+	public $dataObject, $image, $LinkUrl, $Title, $Caption;
+
+	function __construct( $dataObject, $LinkURL = null, $Title = null, $Caption = null ) {
+		$this->image = $image;
+		$this->LinkURL = $LinkURL;
+		$this->Title = $Title;
+		$this->Caption = $Caption;
+	}
 
 	/**
 	 * @return Image
 	 */
-	function Image();
+	function Image() {
+		return $this->image ? $this->image
+				: $this->dataObject instanceof Image ? $this->dataObject
+						: $this->dataObject->Image();
+	}
 
 	/**
 	 * Used to allow ImageCarousel to provide support for resizing.
 	 * @param Image $image
 	 */
-	function setImage( $image );
+	function setImage( $image ) {
+		$this->image = $image;
+	}
 
-	function LinkURL();
-	function Title();
-	function Caption();
+	function __get( $property ) {
+		if( isset($this->dataObject->$property) ) {
+			return $this->dataObject->$property;
+		}
+		else if( method_exists($this->dataObject, $method = "get$property") ) {
+			return $this->dataObject->$method();
+		}
+	}
 
 }
 

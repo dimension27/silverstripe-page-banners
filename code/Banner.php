@@ -1,9 +1,10 @@
 <?php
 
-class Banner extends BetterImage { // implements ImageCarouselItem
+class Banner extends DataObject {
 
 	static $has_one = array (
 		'BannerGroup' => 'BannerGroup',
+		'Image' => 'BetterImage',
 	);
 
 	/**
