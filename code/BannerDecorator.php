@@ -3,7 +3,7 @@
 class BannerDecorator extends DataObjectDecorator {
 
 	protected static $restrictToGroup;
-	protected static $tabName = 'Root.Content.Images';
+	protected static $tabName;
 	protected static $inheritFromParent = true;
 
 	/**
@@ -62,10 +62,13 @@ class BannerDecorator extends DataObjectDecorator {
 		else {
 			$bannerGroups = array('-- No banner groups have been created --');
 		}
-		if( !($field = $fields->fieldByName(self::$tabName)) || !is_a($field, 'Tab') ) {
-			self::$tabName = 'Root.Images';
+		if( isset(self::$tabName) ) {
+			$tabName = self::$tabName;
 		}
-		$fields->addFieldToTab(self::$tabName, $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
+		else {
+			$tabName = $this->owner instanceof Page ? 'Root.Content.Images' : 'Root.Images';
+		}
+		$fields->addFieldToTab($tabName, $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
 		$options = array();
 		if( !self::$restrictToGroup ) {
 			$options['BannerGroup//Banner Group'] = new CompositeField(array(
@@ -77,7 +80,7 @@ class BannerDecorator extends DataObjectDecorator {
 		$options['Image//Upload an image'] = $upload = new ImageUploadField('BannerImage', '');
 		$banner = new SelectionGroup('BannerType', $options);
 		$upload->setUploadFolder('Uploads/Banners');
-		$fields->addFieldToTab(self::$tabName, $banner);
+		$fields->addFieldToTab($tabName, $banner);
 	}
 
 	public function Banner() {

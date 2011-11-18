@@ -22,4 +22,8 @@ class Banner extends DataObject {
 		return $fields;
 	}
 
+	public function forTemplate() {
+		return $this->Image()->forTemplate();
+	}
+
 }

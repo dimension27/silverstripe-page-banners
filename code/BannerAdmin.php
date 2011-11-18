@@ -12,9 +12,14 @@ class BannerAdmin extends ModelAdmin {
 	public function __construct() {
 		$this->showImportForm = false;
 		parent::__construct();
+	}
+
+	public function handleAction($request) {
 		if( class_exists('Subsite') ) {
 			Subsite::changeSubsite(0);
 			Subsite::disable_subsite_filter();
 		}
+		parent::handleAction($request);
 	}
+
 }
