@@ -115,7 +115,7 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function BannerURL( $width, $height ) {
-		$image = $this->Banner();
+		$image = $this->Banner()->Image();
 		if( $image->exists() && file_exists($image->getFullPath()) ) {
 			$image = $image->SetCroppedSize($width, $height);
 			return $image->Filename;
