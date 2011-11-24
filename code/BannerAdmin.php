@@ -19,7 +19,7 @@ class BannerAdmin extends ModelAdmin {
 			Subsite::changeSubsite(0);
 			Subsite::disable_subsite_filter();
 		}
-		parent::handleAction($request);
+		return parent::handleAction($request);
 	}
 
 }
