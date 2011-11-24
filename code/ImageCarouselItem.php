@@ -18,7 +18,7 @@ class ImageCarouselItem extends DataObject {
 	 * @return FieldSet
 	 */
 	public function getCMSFields() {
-		$fields = FormUtils::getFileCMSFields('Content');
+		$fields = FormUtils::getFileCMSFields(true);
 		LinkFields::addLinkFields($fields, null, 'Root.Link');
 		$fields->removeByName('LinkLabel');
 		return $fields;
