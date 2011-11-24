@@ -79,7 +79,11 @@ class BannerDecorator extends DataObjectDecorator {
 		$options['SingleBanner//Single banner'] = new DropdownField('SingleBannerID', '', $banners);
 		$options['Image//Upload an image'] = $upload = new ImageUploadField('BannerImage', '');
 		$banner = new SelectionGroup('BannerType', $options);
-		$upload->setUploadFolder('Uploads/Banners');
+		if( class_exists('UploadFolderManager') )
+			UploadFolderManager::setUploadFolder($this->owner, $upload, 'Banners');
+		else
+			$upload->setUploadFolder('Uploads/Banners');
+		
 		$fields->addFieldToTab($tabName, $banner);
 	}
 
