@@ -30,7 +30,7 @@ class ImageCarousel extends ViewableData {
 		$items = new DataObjectSet();
 		if( $this->items ) {
 			foreach( $this->items as $item ) {
-				if( ($image = $item->Image()) && $image->fileExists() ) {
+				if( ($image = $item->CarouselImage()) && $image->fileExists() ) {
 					$items->push($item);
 				}
 			}
@@ -61,7 +61,7 @@ class ImageCarousel extends ViewableData {
 	public function resizeImages( $method, $arg1, $arg2 = null ) {
 		if( $this->items ) {
 			foreach( $this->items as $item ) {
-				$image = $item->Image(); /* @var $image BetterImage */
+				$image = $item->CarouselImage(); /* @var $image BetterImage */
 				if( $image && $image->fileExists() ) {
 					$item->setCarouselImage($image->$method($arg1, $arg2));
 				}

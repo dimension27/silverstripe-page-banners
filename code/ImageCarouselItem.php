@@ -36,7 +36,7 @@ class ImageCarouselItem extends DataObject {
 	 * @return Image
 	 */
 	function CarouselImage() {
-		return isset($this->resizedImage) ? $this->resizedImage : $this->getImage();
+		return isset($this->resizedImage) ? $this->resizedImage : $this->Image();
 	}
 
 }
