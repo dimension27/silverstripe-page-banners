@@ -161,7 +161,7 @@ class BannerDecorator extends DataObjectDecorator {
 			$items = new DataObjectSet();
 			foreach( $this->AllBanners() as $banner ) {
 				$item = new ImageCarouselItem();
-				$item->setImage($banner->Image());
+				$item->setCarouselImage($banner->Image());
 				$item->Title = $banner->Title;
 				$items->push($item);
 			}

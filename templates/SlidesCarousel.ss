@@ -3,7 +3,7 @@
 	<div class="slides_container">
 	<% control CarouselItems %>
 		<div class="slide">
-			<a href="$LinkURL" title="$Title">$Image.SizedTag</a>
+			<a href="$LinkURL" title="$Title">$CarouselImage.SizedTag</a>
 			<div class="caption">$Caption</div>
 		</div>
 	<% end_control %>

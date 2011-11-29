@@ -28,14 +28,14 @@ class ImageCarouselItem extends DataObject {
 	 * Used to allow ImageCarousel to provide support for resizing.
 	 * @param Image $image
 	 */
-	function setImage( $image ) {
+	function setCarouselImage( $image ) {
 		$this->resizedImage = $image;
 	}
 
 	/**
 	 * @return Image
 	 */
-	function Image() {
+	function CarouselImage() {
 		return isset($this->resizedImage) ? $this->resizedImage : $this->getImage();
 	}
 

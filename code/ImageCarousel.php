@@ -63,7 +63,7 @@ class ImageCarousel extends ViewableData {
 			foreach( $this->items as $item ) {
 				$image = $item->Image(); /* @var $image BetterImage */
 				if( $image && $image->fileExists() ) {
-					$item->setImage($image->$method($arg1, $arg2));
+					$item->setCarouselImage($image->$method($arg1, $arg2));
 				}
 			}
 		}
