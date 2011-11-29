@@ -3,14 +3,13 @@
 class BannerGroup extends DataObject {
 
 	static $db = array(
-		'Title' => 'Varchar',
+		'Title' => 'Varchar(255)',
 		'Notes' => 'Text',
-		'Identifier' => 'Varchar',
+		'Identifier' => 'Varchar(255)',
 	);
 
 	static $indexes = array(
 		'Title' => 'UNIQUE ("Title")',
-		'Identifier' => 'UNIQUE ("Identifier")',
 	);
 
 	static $has_many = array(
@@ -23,9 +22,9 @@ class BannerGroup extends DataObject {
 		$fields->addFieldToTab('Root.Main', $field = new TextareaField('Notes'));
 		if( $this->ID ) {
 			$fields->addFieldToTab('Root.Main', $field = new ImageDataObjectManager(
-				$this, 'Banners', 'Banner'
+				$this, 'Banners', 'Banner', 'Image'
 			));
-			$field->uploadFolder = 'Uploads/Banners';
+			UploadFolderManager::setDOMUploadFolder($field, $this->Identifier);
 		}
 		else {
 			$fields->addFieldToTab('Root.Main', $field = new LiteralField(

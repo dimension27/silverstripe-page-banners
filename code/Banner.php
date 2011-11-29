@@ -1,19 +1,29 @@
 <?php
 
-class Banner extends BetterImage { // implements ImageCarouselItem
+class Banner extends DataObject {
+
+	static $db = array(
+		'Title' => 'Varchar(255)'
+	);
 
 	static $has_one = array (
 		'BannerGroup' => 'BannerGroup',
+		'Image' => 'BetterImage',
 	);
 
 	/**
 	 * @return FieldSet
 	 */
 	public function getCMSFields() {
-		$fields = FormUtils::getFileCMSFields('Caption');
-		LinkFields::addLinkFields($fields, null, 'Root.Link');
-		$fields->removeByName('LinkLabel');
+		$fields = FormUtils::createMain();
+		$fields->addFieldToTab('Root.Main', $field = new TextField('Title'));
+		$fields->addFieldToTab('Root.Main', $field = new ImageUploadField('Image'));
+		UploadFolderManager::setUploadFolder($this, $field);
 		return $fields;
+	}
+
+	public function forTemplate() {
+		return $this->Image()->forTemplate();
 	}
 
 }

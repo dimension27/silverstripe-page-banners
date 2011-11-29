@@ -18,7 +18,7 @@
 class ImageCarousel extends ViewableData {
 
 	public static $options = array();
-	public static $includeScriptInBody = true;
+	public static $includeScriptInBody = false;
 	public $template;
 	protected $items;
 
@@ -81,24 +81,12 @@ class ImageCarousel extends ViewableData {
 		return self::$includeScriptInBody;
 	}
 
-}
-
-interface ImageCarouselItem {
-
-	/**
-	 * @return Image
-	 */
-	function Image();
-
-	/**
-	 * Used to allow ImageCarousel to provide support for resizing.
-	 * @param Image $image
-	 */
-	function setImage( $image );
-
-	function LinkURL();
-	function Title();
-	function Caption();
+	public static function getItemsForImages( $images ) {
+		$items = array();
+		foreach( $images as $image ) {
+			$items[] = new ImageCarouselItem($image);
+		}
+		return $items;
+	}
 
 }
-

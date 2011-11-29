@@ -2,7 +2,7 @@
 <div class="slides-carousel image-carousel">
 	<div class="slides_container">
 	<% control CarouselItems %>
-		<div>
+		<div class="slide">
 			<a href="$LinkURL" title="$Title">$Image.SizedTag</a>
 			<div class="caption">$Caption</div>
 		</div>
