@@ -10,10 +10,8 @@
 	</div>
 	<div class="carousel-navigation">
 		<a href="#" class="prev">Previous</a>
-		<ul class="carousel-pagination">
-		<% control CarouselItems %>
-		<li><a href="#">$Pos</a></li>
-		<% end_control %>
+		<ul class="carousel-pagination"><% control CarouselItems %>
+			<li><a href="#">$Pos</a></li><% end_control %>
 		</ul>
 		<a href="#" class="next">Next</a>
 	</div>

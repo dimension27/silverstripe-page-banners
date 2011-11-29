@@ -29,13 +29,23 @@ class SlidesCarousel extends ImageCarousel {
 	);
 
 	public function forTemplate() {
+		self::addRequirements();
+		return $this->renderWith($this->template);
+	}
+
+	public static function addRequirements() {
 		// slides requires jQuery 1.4.4
-		Requirements::javascript('ss-tools/javascript/jquery-1.4.4.js');
+		$scripts = array(
+				'ss-tools/javascript/jquery-1.4.4.js',
+				'banners/slides/source/slides.min.jquery.js'
+		);
+		foreach( $scripts as $script ) {
+			Requirements::javascript($script);
+		}
 		// block older jQuery versions
 		Requirements::block(SAPPHIRE_DIR . '/thirdparty/jquery/jquery.js');
 		Requirements::block(THIRDPARTY_DIR.'/jquery/jquery-packed.js');
-		Requirements::javascript('banners/slides/source/slides.min.jquery.js');
-		return $this->renderWith($this->template);
+		return $scripts;
 	}
 
 }
