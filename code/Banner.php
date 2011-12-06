@@ -27,3 +27,5 @@ class Banner extends DataObject {
 	}
 
 }
+
+UploadFolderManager::setOptions('Banner', array('subsite' => false));
