@@ -3,17 +3,15 @@
 	<div class="slides_container">
 	<% control CarouselItems %>
 		<div class="slide">
-			<a href="$LinkURL" title="$Title">$Image.SizedTag</a>
+			<a href="$LinkURL" title="$Title">$CarouselImage.SizedTag</a>
 			<div class="caption">$Caption</div>
 		</div>
 	<% end_control %>
 	</div>
 	<div class="carousel-navigation">
 		<a href="#" class="prev">Previous</a>
-		<ul class="carousel-pagination">
-		<% control CarouselItems %>
-		<li><a href="#">$Pos</a></li>
-		<% end_control %>
+		<ul class="carousel-pagination"><% control CarouselItems %>
+			<li><a href="#">$Pos</a></li><% end_control %>
 		</ul>
 		<a href="#" class="next">Next</a>
 	</div>
