@@ -4,7 +4,9 @@
 	<% control CarouselItems %>
 		<div class="slide">
 			<a href="$LinkURL" title="$Title">$CarouselImage.SizedTag</a>
-			<div class="caption">$Caption</div>
+			<div class="caption">
+				<div class="bd">$Content</div>
+			</div>
 		</div>
 	<% end_control %>
 	</div>

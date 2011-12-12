@@ -39,4 +39,9 @@ class ImageCarouselItem extends DataObject {
 		return isset($this->resizedImage) ? $this->resizedImage : $this->Image();
 	}
 
+	function setLinkTarget( $siteTree ) {
+		$this->LinkType = 'Internal';
+		$this->LinkTargetID = $siteTree->ID;
+	}
+
 }
