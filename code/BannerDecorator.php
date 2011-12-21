@@ -11,10 +11,13 @@ class BannerDecorator extends DataObjectDecorator {
 	 * @param BannerGroup $group May be a BannerGroup or its ID
 	 */
 	public static function restrictToGroup( $group ) {
-		self::$restrictToGroup = 
-			is_object($group) ? $group
-				: is_string($group) ? BannerGroup::get_by_identifier($group)
-					: DataObject::get_by_id('BannerGroup', $group);
+		if( !$group )
+			self::$restrictToGroup = null;
+		else
+			self::$restrictToGroup = 
+				is_object($group) ? $group
+					: is_string($group) ? BannerGroup::get_by_identifier($group)
+						: DataObject::get_by_id('BannerGroup', $group);
 	}
 
 	/**
