@@ -156,7 +156,7 @@ class BannerDecorator extends DataObjectDecorator {
 		return $set;
 	} 
 
-	public function BannerMarkup( $width = null, $height = null, $transform = 'SetRatioSize' ) {
+	public function BannerMarkup( $width = null, $height = null, $transform = 'SetCroppedSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
 			$items = new DataObjectSet();
 			foreach( $this->AllBanners() as $banner ) {
@@ -166,7 +166,7 @@ class BannerDecorator extends DataObjectDecorator {
 				$items->push($item);
 			}
 			$carousel = new SlidesCarousel($items);
-			$carousel->setRatioSize($width, $height);
+			$carousel->$transform($width, $height);
 			return $carousel;
 		}
 		else {
