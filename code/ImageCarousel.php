@@ -39,7 +39,7 @@ class ImageCarousel extends ViewableData {
 	}
 
 	public function setWidth( $width ) {
-		$this->resizeImages('SetWidth', $height);
+		$this->resizeImages('SetWidth', $width);
 	}
 
 	public function setHeight( $height ) {
