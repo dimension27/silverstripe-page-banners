@@ -11,10 +11,13 @@ class BannerDecorator extends DataObjectDecorator {
 	 * @param BannerGroup $group May be a BannerGroup or its ID
 	 */
 	public static function restrictToGroup( $group ) {
-		self::$restrictToGroup = 
-			is_object($group) ? $group
-				: is_string($group) ? BannerGroup::get_by_identifier($group)
-					: DataObject::get_by_id('BannerGroup', $group);
+		if( !$group )
+			self::$restrictToGroup = null;
+		else
+			self::$restrictToGroup = 
+				is_object($group) ? $group
+					: is_string($group) ? BannerGroup::get_by_identifier($group)
+						: DataObject::get_by_id('BannerGroup', $group);
 	}
 
 	/**
@@ -156,7 +159,7 @@ class BannerDecorator extends DataObjectDecorator {
 		return $set;
 	} 
 
-	public function BannerMarkup( $width = null, $height = null, $transform = 'SetRatioSize' ) {
+	public function BannerMarkup( $width = null, $height = null, $transform = 'SetCroppedSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
 			$items = new DataObjectSet();
 			foreach( $this->AllBanners() as $banner ) {
@@ -166,7 +169,7 @@ class BannerDecorator extends DataObjectDecorator {
 				$items->push($item);
 			}
 			$carousel = new SlidesCarousel($items);
-			$carousel->setRatioSize($width, $height);
+			$carousel->$transform($width, $height);
 			return $carousel;
 		}
 		else {
