@@ -111,10 +111,7 @@ class BannerDecorator extends DataObjectDecorator {
 				$rv = $this->owner->Parent->Banner();
 			}
 		}
-		if( !$rv ) {
-			$rv = new Image();
-		}
-		return $rv;
+		return $rv ? $rv : new Banner();
 	}
 
 	public function BannerLink( $width, $height ) {
