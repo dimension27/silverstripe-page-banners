@@ -11,10 +11,13 @@ class BannerDecorator extends DataObjectDecorator {
 	 * @param BannerGroup $group May be a BannerGroup or its ID
 	 */
 	public static function restrictToGroup( $group ) {
-		self::$restrictToGroup = 
-			is_object($group) ? $group
-				: is_string($group) ? BannerGroup::get_by_identifier($group)
-					: DataObject::get_by_id('BannerGroup', $group);
+		if( !$group )
+			self::$restrictToGroup = null;
+		else
+			self::$restrictToGroup = 
+				is_object($group) ? $group
+					: is_string($group) ? BannerGroup::get_by_identifier($group)
+						: DataObject::get_by_id('BannerGroup', $group);
 	}
 
 	/**
@@ -115,22 +118,36 @@ class BannerDecorator extends DataObjectDecorator {
 				$rv = $this->owner->Parent->Banner();
 			}
 		}
-		if( !$rv ) {
-			$rv = new Image();
-		}
-		return $rv;
+		return $rv ? $rv : new Banner();
 	}
 
 	public function BannerLink( $width, $height ) {
 		return $this->BannerURL($width, $height);
 	}
 
-	public function BannerURL( $width, $height ) {
+	public function BannerURL( $width = null, $height = null ) {
 		$image = $this->Banner()->Image();
 		if( $image->exists() && file_exists($image->getFullPath()) ) {
-			$image = $image->SetCroppedSize($width, $height);
+			if( $height && $width )
+				$image = $image->setResizedSize($width, $height);
+			else if( !$height )
+				$image = $image->SetWidth($width);
+			else
+				$image = $image->SetHeight($height);
+
+			$this->resizedImage = $image;
+
 			return $image->Filename;
 		}
+	}
+
+	public function BannerHeight() {
+		Debug::bog($this->resizedImage);
+		return isset($this->resizedImage) ? $this->resizedImage->getHeight() : $this->Banner()->Image()->getHeight();
+	}
+
+	public function BannerWidth() {
+		return isset($this->resizedImage) ? $this->resizedImage->getWidth() : $this->Banner()->Image()->getWidth();
 	}
 
 	public function BannerCSS( $width, $height ) {
@@ -163,7 +180,7 @@ class BannerDecorator extends DataObjectDecorator {
 		return $set;
 	}
 
-	public function BannerMarkup( $width = null, $height = null, $transform = 'SetRatioSize' ) {
+	public function BannerMarkup( $width = null, $height = null, $transform = 'SetCroppedSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
 			$items = new DataObjectSet();
 			foreach( $this->AllBanners() as $banner ) {
