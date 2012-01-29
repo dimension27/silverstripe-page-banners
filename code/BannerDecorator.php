@@ -25,6 +25,19 @@ class BannerDecorator extends DataObjectDecorator {
 		self::$tabName = $tabName;
 	}
 
+	public static function getTabName( $owner, $fields ) {
+		if( isset(self::$tabName) ) {
+			$tabName = self::$tabName;
+		}
+		else {
+			$tabName = $owner instanceof Page ? 'Root.Content.Images' : 'Root.Images';
+		}
+		if( !($field = $fields->fieldByName($tabName)) || !is_a($field, 'Tab') ) {
+			$tabName = 'Root.Images';
+		}
+		return $tabName;
+	}
+
 	public static function setInheritFromParent( $bool = true ) {
 		self::$inheritFromParent = $bool;
 	}
@@ -55,19 +68,13 @@ class BannerDecorator extends DataObjectDecorator {
 		else {
 			$banners = array('-- No banners have been created --');
 		}
-		
 		if( $bannerGroups = DataObject::get('BannerGroup') ) { /* @var $bannerGroups DataObjectSet */
 			$bannerGroups = $bannerGroups->map();
 		}
 		else {
 			$bannerGroups = array('-- No banner groups have been created --');
 		}
-		if( isset(self::$tabName) ) {
-			$tabName = self::$tabName;
-		}
-		else {
-			$tabName = $this->owner instanceof Page ? 'Root.Content.Images' : 'Root.Images';
-		}
+		$tabName = $this->getTabName($this->owner, $fields);
 		$fields->addFieldToTab($tabName, $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
 		$options = array();
 		if( !self::$restrictToGroup ) {
@@ -76,8 +83,8 @@ class BannerDecorator extends DataObjectDecorator {
 				new CheckboxField('BannerCarousel', 'Display the banners in a scrolling image carousel'),
 			));
 		}
-		$options['SingleBanner//Single banner'] = new DropdownField('SingleBannerID', '', $banners);
-		$options['Image//Upload an image'] = $upload = new ImageUploadField('BannerImage', '');
+		$options['SingleBanner//Single Banner'] = new DropdownField('SingleBannerID', '', $banners);
+		$options['Image//Upload an Image'] = $upload = new ImageUploadField('BannerImage', '');
 		$banner = new SelectionGroup('BannerType', $options);
 		if( class_exists('UploadFolderManager') )
 			UploadFolderManager::setUploadFolder($this->owner, $upload, 'Banners');
@@ -154,7 +161,7 @@ class BannerDecorator extends DataObjectDecorator {
 			$set = $this->owner->Parent->AllBanners();
 		}
 		return $set;
-	} 
+	}
 
 	public function BannerMarkup( $width = null, $height = null, $transform = 'SetRatioSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
@@ -165,12 +172,23 @@ class BannerDecorator extends DataObjectDecorator {
 				$item->Title = $banner->Title;
 				$items->push($item);
 			}
-			$carousel = new SlidesCarousel($items);
-			$carousel->setRatioSize($width, $height);
-			return $carousel;
+			if( $items->Count() > 1 ) {
+				$carousel = new SlidesCarousel($items);
+				$carousel->$transform($width, $height);
+				return $carousel;
+			}
 		}
-		else {
-			return $this->Banner();
+		return $this->Banner();
+	}
+
+	public static function removeBannerFields( FieldSet $fields, DataObject $owner ) {
+		$fields->removeByName('BannerImage');
+		$fields->removeByName('BannerType');
+		$tabName = self::getTabName($owner, $fields);
+		if( $tab = $fields->fieldByName($tabName) && $tab instanceof Tab ) { /* @var $tab Tab */
+			if( $tab && ($tab->Fields()->Count() == 0) ) {
+				$fields->removeByName(preg_replace('/.+\./', '', $tabName));
+			}
 		}
 	}
 

@@ -1,6 +1,8 @@
 <?php
 /**
- *
+ * Requirements:
+ * - Add SlidesCarousel::addRequirements() to your Controller::init() method.
+ * - Add the following Javascript:
 	$('.slides-carousel').slides({
 		preload: true,
 		preloadImage: '/banners/images/loading.gif',
@@ -10,9 +12,9 @@
 		paginationClass: 'carousel-pagination',
 		generatePagination: false
 	});
-
+ * - Add $BannerMarkup([width], [height]) to your template
+ * - You'll probably want to override SlidesCarousel.css by copying it into your theme
  * @author simonwade
- *
  */
 class SlidesCarousel extends ImageCarousel {
 
@@ -28,6 +30,8 @@ class SlidesCarousel extends ImageCarousel {
 		'generatePagination' => false,
 	);
 
+	public static $jQuery = 'ss-tools/javascript/jquery/jquery-1.4.4.js';
+
 	public function forTemplate() {
 		self::addRequirements();
 		return $this->renderWith($this->template);
@@ -36,7 +40,7 @@ class SlidesCarousel extends ImageCarousel {
 	public static function addRequirements() {
 		// slides requires jQuery 1.4.4
 		$scripts = array(
-				'ss-tools/javascript/jquery-1.4.4.js',
+				self::$jQuery,
 				'banners/slides/source/slides.min.jquery.js'
 		);
 		foreach( $scripts as $script ) {
