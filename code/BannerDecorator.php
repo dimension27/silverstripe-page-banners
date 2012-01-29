@@ -118,12 +118,29 @@ class BannerDecorator extends DataObjectDecorator {
 		return $this->BannerURL($width, $height);
 	}
 
-	public function BannerURL( $width, $height ) {
+	public function BannerURL( $width = null, $height = null ) {
 		$image = $this->Banner()->Image();
 		if( $image->exists() && file_exists($image->getFullPath()) ) {
-			$image = $image->SetCroppedSize($width, $height);
+			if( $height && $width )
+				$image = $image->setResizedSize($width, $height);
+			else if( !$height )
+				$image = $image->SetWidth($width);
+			else
+				$image = $image->SetHeight($height);
+
+			$this->resizedImage = $image;
+
 			return $image->Filename;
 		}
+	}
+
+	public function BannerHeight() {
+		Debug::bog($this->resizedImage);
+		return isset($this->resizedImage) ? $this->resizedImage->getHeight() : $this->Banner()->Image()->getHeight();
+	}
+
+	public function BannerWidth() {
+		return isset($this->resizedImage) ? $this->resizedImage->getWidth() : $this->Banner()->Image()->getWidth();
 	}
 
 	public function BannerCSS( $width, $height ) {
