@@ -152,7 +152,6 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function BannerHeight() {
-		Debug::bog($this->resizedImage);
 		return isset($this->resizedImage) ? $this->resizedImage->getHeight() : $this->Banner()->Image()->getHeight();
 	}
 
