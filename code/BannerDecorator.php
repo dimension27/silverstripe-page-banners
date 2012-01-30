@@ -1,10 +1,20 @@
 <?php
-
+/**
+ * Use BannerDecorator::add_extension() in order to be able to use UploadFolderManager::printUploadFolders().
+ * @author simonwade
+ */
 class BannerDecorator extends DataObjectDecorator {
 
 	protected static $restrictToGroup;
 	protected static $tabName;
 	protected static $inheritFromParent = true;
+
+	public static function add_extension( $className ) {
+		Object::add_extension($className, 'BannerDecorator');
+		if( Director::isDev() && class_exists('UploadFolderManager') ) {
+			UploadFolderManager::setOptions($className, array());
+		}
+	}
 
 	/**
 	 * Restricts the selection of banners to a single BannerGroup in the CMS fields
