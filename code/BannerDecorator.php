@@ -153,7 +153,6 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function BannerHeight() {
-		Debug::bog($this->resizedImage);
 		return isset($this->resizedImage) ? $this->resizedImage->getHeight() : $this->Banner()->Image()->getHeight();
 	}
 
@@ -213,7 +212,7 @@ class BannerDecorator extends DataObjectDecorator {
 		$fields->removeByName('BannerImage');
 		$fields->removeByName('BannerType');
 		$tabName = self::getTabName($owner, $fields);
-		if( $tab = $fields->fieldByName($tabName) && $tab instanceof Tab ) { /* @var $tab Tab */
+		if( ($tab = $fields->fieldByName($tabName)) && ($tab instanceof Tab) ) { /* @var $tab Tab */
 			if( $tab && ($tab->Fields()->Count() == 0) ) {
 				$fields->removeByName(preg_replace('/.+\./', '', $tabName));
 			}
