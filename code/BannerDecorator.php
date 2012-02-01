@@ -45,9 +45,6 @@ class BannerDecorator extends DataObjectDecorator {
 		else {
 			$tabName = $owner instanceof Page ? 'Root.Content.Images' : 'Root.Images';
 		}
-		if( !($field = $fields->fieldByName($tabName)) || !is_a($field, 'Tab') ) {
-			$tabName = 'Root.Images';
-		}
 		return $tabName;
 	}
 
