@@ -58,7 +58,7 @@ class BannerDecorator extends DataObjectDecorator {
 	public function extraStatics() {
 		return array(
 			'db' => array(
-				'BannerType' => 'Enum("Image, SingleBanner, BannerGroup")',
+				'BannerType' => 'Enum("None,Image,SingleBanner,BannerGroup")',
 				'BannerCarousel' => 'Int',
 			),
 			'has_one' => array(
@@ -67,7 +67,7 @@ class BannerDecorator extends DataObjectDecorator {
 				'BannerGroup' => 'BannerGroup',
 			),
 			'defaults' => array(
-				'BannerType' => 'BannerGroup'
+				'BannerType' => 'None'
 			)
 		);
 	}
@@ -90,13 +90,14 @@ class BannerDecorator extends DataObjectDecorator {
 		$tabName = $this->getTabName($this->owner, $fields);
 		$fields->addFieldToTab($tabName, $field = new LiteralField('BannerImage', '<h3>Banner Image</h3>'.NL));
 		$options = array();
+		$options['None//No custom banner'] = new LiteralField(null, '');
 		if( !self::$restrictToGroup ) {
-			$options['BannerGroup//Banner Group'] = new CompositeField(array(
+			$options['BannerGroup//Banner group'] = new CompositeField(array(
 				new DropdownField('BannerGroupID', '', $bannerGroups),
 				new CheckboxField('BannerCarousel', 'Display the banners in a scrolling image carousel'),
 			));
 		}
-		$options['SingleBanner//Single Banner'] = new DropdownField('SingleBannerID', '', $banners);
+		$options['SingleBanner//Single banner'] = new DropdownField('SingleBannerID', '', $banners);
 		$options['Image//Upload an Image'] = $upload = new ImageUploadField('BannerImage', '');
 		$banner = new SelectionGroup('BannerType', $options);
 		if( class_exists('UploadFolderManager') )
