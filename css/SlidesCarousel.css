@@ -2,7 +2,7 @@
 	width: 960px;
 	height: 340px;
 }
-.slides_control .slide {
+.slides_container .slide {
 	display: none;
 }
 .carousel-pagination {
