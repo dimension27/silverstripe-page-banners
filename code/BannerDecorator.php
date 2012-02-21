@@ -138,9 +138,9 @@ class BannerDecorator extends DataObjectDecorator {
 		if( $image->exists() && file_exists($image->getFullPath()) ) {
 			if( $height && $width )
 				$image = $image->setResizedSize($width, $height);
-			else if( !$height )
+			else if( $width && !$height )
 				$image = $image->SetWidth($width);
-			else
+			else if( !$width && $height )
 				$image = $image->SetHeight($height);
 
 			$this->resizedImage = $image;
