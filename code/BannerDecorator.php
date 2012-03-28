@@ -129,6 +129,10 @@ class BannerDecorator extends DataObjectDecorator {
 		return $rv ? $rv : new Banner();
 	}
 
+	public function HasBanner() {
+		return $this->Banner() ? true : false;
+	}
+
 	public function BannerLink( $width, $height ) {
 		return $this->BannerURL($width, $height);
 	}
@@ -142,9 +146,7 @@ class BannerDecorator extends DataObjectDecorator {
 				$image = $image->SetWidth($width);
 			else if( !$width && $height )
 				$image = $image->SetHeight($height);
-
 			$this->resizedImage = $image;
-
 			return $image->Filename;
 		}
 	}
