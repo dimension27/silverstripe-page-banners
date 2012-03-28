@@ -130,7 +130,7 @@ class BannerDecorator extends DataObjectDecorator {
 	}
 
 	public function HasBanner() {
-		return $this->Banner() ? true : false;
+		return $this->Banner()->Image()->fileExists() ? true : false;
 	}
 
 	public function BannerLink( $width, $height ) {
