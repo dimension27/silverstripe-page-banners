@@ -203,7 +203,9 @@ class BannerDecorator extends DataObjectDecorator {
 				return $carousel;
 			}
 		}
-		return $this->Banner();
+		if( $banner = $this->Banner() ) {
+			return $banner->Image()->$transform($width, $height);
+		}
 	}
 
 	public static function removeBannerFields( FieldSet $fields, DataObject $owner ) {
