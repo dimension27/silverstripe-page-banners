@@ -2,6 +2,8 @@
 
 class ImageCarouselItem extends DataObject {
 
+	static $extensions = array('LinkFieldsDecorator');
+
 	static $db = array(
 		'Title' => 'Varchar(255)',
 		'Content' => 'HTMLText',

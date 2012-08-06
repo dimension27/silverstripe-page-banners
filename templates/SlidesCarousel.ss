@@ -3,7 +3,11 @@
 	<div class="slides_container">
 	<% control CarouselItems %>
 		<div class="slide">
+			<% if HasLink %>
 			<a href="$LinkURL" title="$Title">$CarouselImage.SizedTag</a>
+			<% else %>
+			$CarouselImage.SizedTag
+			<% end_if %>
 			<div class="caption">
 				<div class="bd">$Content</div>
 			</div>
