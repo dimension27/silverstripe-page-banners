@@ -16,7 +16,7 @@ class BannerAdmin extends ModelAdmin {
 
 	public function handleAction($request) {
 		if( class_exists('Subsite') ) {
-			Subsite::changeSubsite(0);
+			Subsite::temporarily_set_subsite(0);
 			Subsite::disable_subsite_filter();
 		}
 		return parent::handleAction($request);
