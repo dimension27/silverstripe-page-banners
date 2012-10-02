@@ -133,6 +133,12 @@ class BannerDecorator extends DataObjectDecorator {
 		return $this->Banner()->Image()->fileExists() ? true : false;
 	}
 
+	public function HasCarousel() {
+		if( $this->owner->BannerType == 'BannerGroup' && $this->owner->BannerCarousel )
+			return ($banners = $this->AllBanners()) && ($banners->exists()) && ($banners->Count() > 1);
+		return false;
+	}
+
 	public function BannerLink( $width, $height ) {
 		return $this->BannerURL($width, $height);
 	}
@@ -191,20 +197,24 @@ class BannerDecorator extends DataObjectDecorator {
 
 	public function BannerMarkup( $width = null, $height = null, $transform = 'SetCroppedSize' ) {
 		if( ($this->owner->BannerType == 'BannerGroup') && $this->owner->BannerCarousel ) {
-			$items = new DataObjectSet();
-			foreach( $this->AllBanners() as $banner ) {
-				$item = new ImageCarouselItem();
-				$item->initFromDataObject($banner);
-				$items->push($item);
-			}
-			if( $items->Count() > 1 ) {
-				$carousel = new SlidesCarousel($items);
-				$carousel->$transform($width, $height);
+			if( $carousel = $this->CarouselMarkup($width, $height, $transform) )
 				return $carousel;
-			}
 		}
-		if( $banner = $this->Banner() ) {
+		if( $banner = $this->Banner() )
 			return $banner->Image()->$transform($width, $height);
+	}
+
+	public function CarouselMarkup( $width = null, $height = null, $transform = 'SetCroppedSize' ) {
+		$items = new DataObjectSet();
+		foreach( $this->AllBanners() as $banner ) {
+			$item = new ImageCarouselItem();
+			$item->initFromDataObject($banner);
+			$items->push($item);
+		}
+		if( $items->Count() > 1 ) {
+			$carousel = new SlidesCarousel($items);
+			$carousel->$transform($width, $height);
+			return $carousel;
 		}
 	}
 
