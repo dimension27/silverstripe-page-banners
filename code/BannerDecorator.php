@@ -8,6 +8,7 @@ class BannerDecorator extends DataObjectDecorator {
 	protected static $restrictToGroup;
 	protected static $tabName;
 	protected static $inheritFromParent = true;
+	public static $carouselClass = 'SlidesCarousel';
 
 	public static function add_extension( $className ) {
 		Object::add_extension($className, 'BannerDecorator');
@@ -212,7 +213,8 @@ class BannerDecorator extends DataObjectDecorator {
 			$items->push($item);
 		}
 		if( $items->Count() > 1 ) {
-			$carousel = new SlidesCarousel($items);
+			$className = $this->stat('CarouselClass');
+			$carousel = new $className($items);
 			$carousel->$transform($width, $height);
 			return $carousel;
 		}
